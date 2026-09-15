@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Birthday!</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', serif, sans-serif; }
+    body { background: #13030a; color: #fce4ec; min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; }
+    .container { width: 100%; max-width: 750px; background: rgba(28, 7, 18, 0.9); border: 1px solid rgba(255, 182, 193, 0.15); border-radius: 16px; padding: 30px; box-shadow: 0 15px 35px rgba(0,0,0,0.7); position: relative; }
+    
+    /* Music Widget */
+    .music-player { display: flex; align-items: center; gap: 10px; background: rgba(0,0,0,0.4); padding: 8px 15px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); width: fit-content; margin-bottom: 20px; font-size: 0.8rem; }
+    
+    /* Secret Code */
+    .pin-screen { text-align: center; padding: 40px 10px; }
+    .pin-screen h2 { color: #f8bbd0; font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; }
+    .pin-screen h1 { font-size: 1.8rem; margin-bottom: 20px; font-family: Georgia, serif; }
+    .pin-input { width: 180px; padding: 12px; text-align: center; font-size: 1.2rem; letter-spacing: 5px; border-radius: 8px; border: 1px solid #e91e63; background: rgba(0,0,0,0.5); color: #fff; margin-bottom: 15px; outline: none; }
+    .btn { background: #e91e63; color: white; border: none; padding: 10px 25px; border-radius: 20px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+    .btn:hover { background: #c2185b; }
+
+    /* Main Content */
+    .main-content { display: none; }
+    nav { display: flex; justify-content: space-around; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 15px; margin-bottom: 25px; flex-wrap: wrap; gap: 10px; }
+    nav a { color: #f8bbd0; text-decoration: none; font-size: 0.85rem; padding: 6px 12px; border-radius: 6px; transition: 0.3s; }
+    nav a.active { background: rgba(233, 30, 99, 0.3); color: #fff; }
+    
+    .section { display: none; animation: fadeIn 0.5s ease-in-out; }
+    .section.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+    .hero-title { font-size: 2.2rem; color: #ff80ab; font-family: Georgia, serif; margin-bottom: 15px; }
+    .card { background: rgba(255, 255, 255, 0.03); padding: 18px; border-radius: 12px; margin-top: 15px; border: 1px solid rgba(255,255,255,0.08); }
+    
+    /* Bottle & Letter Effect */
+    .bottle-box { text-align: center; padding: 30px; cursor: pointer; background: rgba(0,0,0,0.2); border-radius: 12px; border: 1px dashed rgba(255,128,171,0.3); }
+    .bottle-icon { font-size: 3rem; margin-bottom: 10px; display: inline-block; transition: 0.3s; }
+    .bottle-box:hover .bottle-icon { transform: scale(1.1) rotate(5deg); }
+    .letter-text { display: none; font-style: italic; line-height: 1.8; text-align: left; }
+
+    /* Candle Section */
+    .candle-box { text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); }
+    .candle { font-size: 2.5rem; margin-bottom: 10px; }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="music-player">
+      <span>🎵</span>
+      <span>Background Music - Playing</span>
+      <audio id="bgMusic" loop src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
+    </div>
+
+    <div id="pinScreen" class="pin-screen">
+      <h2>FOR YOUR EYES ONLY</h2>
+      <h1>Enter Your Secret Code</h1>
+      <input type="password" id="pinInput" class="pin-input" placeholder="**" maxlength="8"><br>
+      <button class="btn" onclick="checkPin()">UNLOCK &#10084;</button>
+      <p id="errorMsg" style="color: #ff5252; margin-top: 10px; font-size: 0.8rem;"></p>
+    </div>
+
+    <div id="mainContent" class="main-content">
+      <nav>
+        <a href="#" onclick="showTab(event, 'surface')" class="active">Surface</a>
+        <a href="#" onclick="showTab(event, 'memories')">Our Memories</a>
+        <a href="#" onclick="showTab(event, 'letter')">The Letter</a>
+        <a href="#" onclick="showTab(event, 'wishes')">Wishes</a>
+      </nav>
+
+      <div id="surface" class="section active">
+        <h1 class="hero-title">Happy Birthday, My Favorite Person</h1>
+        <p style="line-height: 1.7; color: #d1c4e9;">Selamat datang di ruang kecil ini. Semua pesan dan kenangan di dalamnya dibuat khusus untuk merayakan hari spesialmu.</p>
+      </div>
+
+      <div id="memories" class="section">
+        <h2 style="font-family: Georgia, serif;">Chapters From Our Story</h2>
+        <div class="card">
+          <h4 style="color: #ff80ab;">CHAPTER 001 — Where it all started</h4>
+          <p style="font-size: 0.9rem; margin-top: 8px; color: #e0e0e0;">Awal dari semua cerita manis dan momen yang tak terlupakan.</p>
+        </div>
+        <div class="card">
+          <h4 style="color: #ff80ab;">CHAPTER 002 — The quiet days</h4>
+          <p style="font-size: 0.9rem; margin-top: 8px; color: #e0e0e0;">Hari-hari sederhana yang terasa hangat karena hadirmu.</p>
+        </div>
+      </div>
+
+      <div id="letter" class="section">
+        <h2 style="font-family: Georgia, serif; margin-bottom: 15px;">Open when found</h2>
+        <div id="bottleBox" class="bottle-box" onclick="openLetter()">
+          <div class="bottle-icon">🍾</div>
+          <p style="font-size: 0.85rem; color: #ff80ab;">TAP THE BOTTLE TO OPEN IT</p>
+        </div>
+        <div id="letterText" class="card letter-text">
+          <p>"Dear you, terima kasih sudah hadir dan bertahan sampai hari ini. Semoga di usia yang baru ini kamu dikelilingi oleh hal-hal baik, kebahagiaan, dan orang-orang yang tulus menyayangimu. Happy Birthday!"</p>
+        </div>
+      </div>
+
+      <div id="wishes" class="section">
+        <h2 style="font-family: Georgia, serif;">Wishes for the year ahead</h2>
+        <div class="card">
+          <p>✨ Semoga semua impianmu perlahan-lahan terwujud tahun ini.</p>
+        </div>
+        <div class="card">
+          <p>✨ Tetaplah menjadi pribadi yang hangat dan bersinar.</p>
+        </div>
+
+        <div class="candle-box">
+          <div class="candle">🕯️🕯️🕯️</div>
+          <button class="btn" onclick="alert('Make a wish! 💖')">Make a Wish</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const CORRECT_PIN = "1234"; // Ganti PIN sesuai keinginan
+
+    function checkPin() {
+      const input = document.getElementById('pinInput').value;
+      if (input === CORRECT_PIN) {
+        document.getElementById('pinScreen').style.display = 'none';
+        document.getElementById('mainContent').style.display = 'block';
+        
+        // Putar musik saat unlocked
+        const music = document.getElementById('bgMusic');
+        if(music) music.play().catch(()=>{});
+      } else {
+        document.getElementById('errorMsg').innerText = "Kode salah, coba lagi!";
+      }
+    }
+
+    function showTab(e, id) {
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      e.target.classList.add('active');
+    }
+
+    function openLetter() {
+      document.getElementById('bottleBox').style.display = 'none';
+      document.getElementById('letterText').style.display = 'block';
+    }
+  </script>
+</body>
+</html>
