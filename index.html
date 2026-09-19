@@ -1,146 +1,663 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Happy Birthday!</title>
+  <title>Rafi Noviyanto Pratama</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', serif, sans-serif; }
-    body { background: #13030a; color: #fce4ec; min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; }
-    .container { width: 100%; max-width: 750px; background: rgba(28, 7, 18, 0.9); border: 1px solid rgba(255, 182, 193, 0.15); border-radius: 16px; padding: 30px; box-shadow: 0 15px 35px rgba(0,0,0,0.7); position: relative; }
-    
-    /* Music Widget */
-    .music-player { display: flex; align-items: center; gap: 10px; background: rgba(0,0,0,0.4); padding: 8px 15px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); width: fit-content; margin-bottom: 20px; font-size: 0.8rem; }
-    
-    /* Secret Code */
-    .pin-screen { text-align: center; padding: 40px 10px; }
-    .pin-screen h2 { color: #f8bbd0; font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; }
-    .pin-screen h1 { font-size: 1.8rem; margin-bottom: 20px; font-family: Georgia, serif; }
-    .pin-input { width: 180px; padding: 12px; text-align: center; font-size: 1.2rem; letter-spacing: 5px; border-radius: 8px; border: 1px solid #e91e63; background: rgba(0,0,0,0.5); color: #fff; margin-bottom: 15px; outline: none; }
-    .btn { background: #e91e63; color: white; border: none; padding: 10px 25px; border-radius: 20px; cursor: pointer; font-weight: bold; transition: 0.3s; }
-    .btn:hover { background: #c2185b; }
+    /* VARIABEL WARNA KUSTOM */
+    :root {
+      --background: #00050B;
+      --background-dark: #010814;
+      --card: #020F22;
+      --card-soft: #041429;
+      --border: #346CB7;
+      --blue: #3475C7;
+      --blue-soft: #6FA4E8;
+      --blue-light: #C2D9F4;
+      --white: #F4F7FC;
+    }
 
-    /* Main Content */
-    .main-content { display: none; }
-    nav { display: flex; justify-content: space-around; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 15px; margin-bottom: 25px; flex-wrap: wrap; gap: 10px; }
-    nav a { color: #f8bbd0; text-decoration: none; font-size: 0.85rem; padding: 6px 12px; border-radius: 6px; transition: 0.3s; }
-    nav a.active { background: rgba(233, 30, 99, 0.3); color: #fff; }
-    
-    .section { display: none; animation: fadeIn 0.5s ease-in-out; }
-    .section.active { display: block; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      scroll-behavior: smooth;
+    }
 
-    .hero-title { font-size: 2.2rem; color: #ff80ab; font-family: Georgia, serif; margin-bottom: 15px; }
-    .card { background: rgba(255, 255, 255, 0.03); padding: 18px; border-radius: 12px; margin-top: 15px; border: 1px solid rgba(255,255,255,0.08); }
-    
-    /* Bottle & Letter Effect */
-    .bottle-box { text-align: center; padding: 30px; cursor: pointer; background: rgba(0,0,0,0.2); border-radius: 12px; border: 1px dashed rgba(255,128,171,0.3); }
-    .bottle-icon { font-size: 3rem; margin-bottom: 10px; display: inline-block; transition: 0.3s; }
-    .bottle-box:hover .bottle-icon { transform: scale(1.1) rotate(5deg); }
-    .letter-text { display: none; font-style: italic; line-height: 1.8; text-align: left; }
+    body {
+      background-color: var(--background);
+      color: var(--white);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      overflow-x: hidden;
+    }
 
-    /* Candle Section */
-    .candle-box { text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); }
-    .candle { font-size: 2.5rem; margin-bottom: 10px; }
+    /* PASSCODE MODAL (PINTU MASUK) */
+    #pinModal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: radial-gradient(circle at center, var(--card-soft) 0%, var(--background-dark) 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 99999;
+    }
+
+    .pin-box {
+      background: rgba(2, 15, 34, 0.85);
+      backdrop-filter: blur(15px);
+      padding: 40px 30px;
+      border-radius: 20px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), inset 0 0 1px var(--blue-soft);
+      max-width: 380px;
+      width: 90%;
+      border: 1px solid var(--border);
+    }
+
+    .pin-box p.subtitle {
+      font-size: 0.7rem;
+      letter-spacing: 2px;
+      color: var(--blue-soft);
+      margin-bottom: 8px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .pin-box h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      margin-bottom: 25px;
+      color: var(--white);
+      font-weight: 600;
+    }
+
+    .pin-box input {
+      width: 100%;
+      padding: 14px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: var(--background-dark);
+      color: var(--white);
+      text-align: center;
+      font-size: 1.2rem;
+      letter-spacing: 5px;
+      margin-bottom: 20px;
+      outline: none;
+      transition: 0.3s;
+    }
+
+    .pin-box input:focus {
+      border-color: var(--blue-soft);
+      box-shadow: 0 0 12px rgba(111, 164, 232, 0.4);
+    }
+
+    .pin-box button {
+      width: 100%;
+      padding: 14px;
+      border-radius: 25px;
+      border: none;
+      background: linear-gradient(135deg, var(--blue), var(--card-soft));
+      color: var(--white);
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: 0.3s;
+      box-shadow: 0 4px 15px rgba(52, 117, 199, 0.4);
+    }
+
+    .pin-box button:hover {
+      opacity: 0.9;
+      transform: translateY(-2px);
+    }
+
+    /* KONTEN UTAMA */
+    #mainContent {
+      display: none;
+      width: 100%;
+      max-width: 768px;
+      padding: 20px 15px 80px 15px;
+    }
+
+    /* STICKY NAVBAR NAVIGATION */
+    .navbar {
+      position: sticky;
+      top: 10px;
+      z-index: 100;
+      background: rgba(2, 15, 34, 0.8);
+      backdrop-filter: blur(12px);
+      padding: 10px;
+      border-radius: 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      border: 1px solid var(--border);
+    }
+
+    .brand {
+      font-family: 'Playfair Display', serif;
+      font-size: 0.9rem;
+      font-weight: 600;
+      padding-left: 10px;
+      color: var(--white);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      padding-right: 10px;
+    }
+
+    .nav-links a {
+      color: var(--blue-light);
+      text-decoration: none;
+      font-size: 0.75rem;
+      white-space: nowrap;
+      transition: 0.3s;
+    }
+
+    .nav-links a:hover {
+      color: var(--blue-soft);
+    }
+
+    /* HERO & COUNTDOWN SECTION */
+    .hero-card {
+      background: radial-gradient(circle at top, var(--card-soft) 0%, var(--card) 100%);
+      border-radius: 24px;
+      padding: 40px 20px;
+      text-align: center;
+      margin-bottom: 25px;
+      border: 1px solid var(--border);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    }
+
+    .hero-subtitle {
+      font-size: 0.75rem;
+      letter-spacing: 2px;
+      color: var(--blue-soft);
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem;
+      line-height: 1.2;
+      margin-bottom: 15px;
+      color: var(--white);
+    }
+
+    .hero-title i {
+      font-style: italic;
+      color: var(--blue-light);
+    }
+
+    .hero-description {
+      font-size: 0.85rem;
+      color: var(--blue-light);
+      max-width: 500px;
+      margin: 0 auto 25px auto;
+      line-height: 1.5;
+    }
+
+    .countdown {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 25px;
+    }
+
+    .time-unit {
+      background: rgba(4, 20, 41, 0.7);
+      border: 1px solid var(--border);
+      padding: 12px;
+      border-radius: 16px;
+      min-width: 65px;
+    }
+
+    .time-unit span {
+      display: block;
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: var(--white);
+    }
+
+    .time-unit label {
+      font-size: 0.65rem;
+      color: var(--blue-soft);
+      letter-spacing: 1px;
+    }
+
+    .btn-pink {
+      background: linear-gradient(135deg, var(--blue), var(--border));
+      color: var(--white);
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      box-shadow: 0 4px 15px rgba(52, 117, 199, 0.35);
+    }
+
+    /* SECTION TITLE */
+    .section-header {
+      text-align: center;
+      margin: 40px 0 20px 0;
+    }
+
+    .section-header .tag {
+      font-size: 0.7rem;
+      letter-spacing: 2px;
+      color: var(--blue-soft);
+      text-transform: uppercase;
+    }
+
+    .section-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      margin-top: 5px;
+      color: var(--white);
+    }
+
+    /* CHAPTERS / OUR STORY SECTION */
+    .story-card {
+      background: var(--card);
+      border-radius: 16px;
+      padding: 18px;
+      margin-bottom: 12px;
+      border: 1px solid rgba(52, 108, 183, 0.3);
+    }
+
+    .story-card .chapter {
+      font-size: 0.65rem;
+      color: var(--blue-soft);
+      letter-spacing: 1px;
+    }
+
+    .story-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      margin: 4px 0 8px 0;
+      color: var(--white);
+    }
+
+    .story-card p {
+      font-size: 0.8rem;
+      color: var(--blue-light);
+      line-height: 1.4;
+    }
+
+    /* PHOTO GALLERY */
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .photo-item {
+      background: var(--card);
+      border-radius: 16px;
+      padding: 8px;
+      border: 1px solid rgba(52, 108, 183, 0.3);
+    }
+
+    .photo-item img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 12px;
+      display: block;
+    }
+
+    .photo-item p {
+      font-size: 0.75rem;
+      color: var(--blue-light);
+      margin-top: 8px;
+      padding: 0 4px;
+      line-height: 1.3;
+    }
+
+    /* BOTTLE LETTER SECTION */
+    .bottle-box {
+      background: radial-gradient(circle at center, var(--card-soft) 0%, var(--background-dark) 100%);
+      border-radius: 20px;
+      padding: 30px 20px;
+      text-align: center;
+      border: 1px solid var(--border);
+    }
+
+    .bottle-icon {
+      font-size: 3rem;
+      margin-bottom: 15px;
+      cursor: pointer;
+      display: inline-block;
+      transition: 0.3s;
+    }
+
+    .bottle-icon:hover {
+      transform: scale(1.1) rotate(10deg);
+    }
+
+    .letter-content {
+      display: none;
+      background: rgba(2, 15, 34, 0.9);
+      padding: 20px;
+      border-radius: 12px;
+      text-align: left;
+      font-size: 0.85rem;
+      color: var(--white);
+      line-height: 1.6;
+      margin-top: 20px;
+      border: 1px solid var(--border);
+      animation: slideUpText 0.8s ease forwards;
+    }
+
+    @keyframes slideUpText {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* WISHES CARDS GRID */
+    .wishes-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .wish-card {
+      background: var(--card);
+      border-radius: 16px;
+      padding: 16px;
+      border: 1px solid rgba(52, 108, 183, 0.3);
+      font-size: 0.78rem;
+      color: var(--blue-light);
+      line-height: 1.4;
+    }
+
+    /* CANDLE SECTION */
+    .candle-box {
+      text-align: center;
+      padding: 40px 20px;
+      background: var(--card);
+      border-radius: 24px;
+      margin-top: 30px;
+      border: 1px solid var(--border);
+    }
+
+    .candles {
+      font-size: 2.5rem;
+      margin: 20px 0;
+      letter-spacing: 5px;
+    }
+
+    /* FLOATING MUSIC BUTTON */
+    .music-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: rgba(52, 117, 199, 0.85);
+      backdrop-filter: blur(8px);
+      color: var(--white);
+      border: none;
+      padding: 10px 18px;
+      border-radius: 25px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      z-index: 999;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+      border: 1px solid var(--blue-soft);
+    }
   </style>
 </head>
 <body>
 
-  <div class="container">
-    <div class="music-player">
-      <span>🎵</span>
-      <span>Background Music - Playing</span>
-      <audio id="bgMusic" loop src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
-    </div>
-
-    <div id="pinScreen" class="pin-screen">
-      <h2>FOR YOUR EYES ONLY</h2>
-      <h1>Enter Your Secret Code</h1>
-      <input type="password" id="pinInput" class="pin-input" placeholder="**" maxlength="8"><br>
-      <button class="btn" onclick="checkPin()">UNLOCK &#10084;</button>
-      <p id="errorMsg" style="color: #ff5252; margin-top: 10px; font-size: 0.8rem;"></p>
-    </div>
-
-    <div id="mainContent" class="main-content">
-      <nav>
-        <a href="#" onclick="showTab(event, 'surface')" class="active">Surface</a>
-        <a href="#" onclick="showTab(event, 'memories')">Our Memories</a>
-        <a href="#" onclick="showTab(event, 'letter')">The Letter</a>
-        <a href="#" onclick="showTab(event, 'wishes')">Wishes</a>
-      </nav>
-
-      <div id="surface" class="section active">
-        <h1 class="hero-title">Happy Birthday, My Favorite Person</h1>
-        <p style="line-height: 1.7; color: #d1c4e9;">Selamat datang di ruang kecil ini. Semua pesan dan kenangan di dalamnya dibuat khusus untuk merayakan hari spesialmu.</p>
-      </div>
-
-      <div id="memories" class="section">
-        <h2 style="font-family: Georgia, serif;">Chapters From Our Story</h2>
-        <div class="card">
-          <h4 style="color: #ff80ab;">CHAPTER 001 — Where it all started</h4>
-          <p style="font-size: 0.9rem; margin-top: 8px; color: #e0e0e0;">Awal dari semua cerita manis dan momen yang tak terlupakan.</p>
-        </div>
-        <div class="card">
-          <h4 style="color: #ff80ab;">CHAPTER 002 — The quiet days</h4>
-          <p style="font-size: 0.9rem; margin-top: 8px; color: #e0e0e0;">Hari-hari sederhana yang terasa hangat karena hadirmu.</p>
-        </div>
-      </div>
-
-      <div id="letter" class="section">
-        <h2 style="font-family: Georgia, serif; margin-bottom: 15px;">Open when found</h2>
-        <div id="bottleBox" class="bottle-box" onclick="openLetter()">
-          <div class="bottle-icon">🍾</div>
-          <p style="font-size: 0.85rem; color: #ff80ab;">TAP THE BOTTLE TO OPEN IT</p>
-        </div>
-        <div id="letterText" class="card letter-text">
-          <p>"Dear you, terima kasih sudah hadir dan bertahan sampai hari ini. Semoga di usia yang baru ini kamu dikelilingi oleh hal-hal baik, kebahagiaan, dan orang-orang yang tulus menyayangimu. Happy Birthday!"</p>
-        </div>
-      </div>
-
-      <div id="wishes" class="section">
-        <h2 style="font-family: Georgia, serif;">Wishes for the year ahead</h2>
-        <div class="card">
-          <p>✨ Semoga semua impianmu perlahan-lahan terwujud tahun ini.</p>
-        </div>
-        <div class="card">
-          <p>✨ Tetaplah menjadi pribadi yang hangat dan bersinar.</p>
-        </div>
-
-        <div class="candle-box">
-          <div class="candle">🕯️🕯️🕯️</div>
-          <button class="btn" onclick="alert('Make a wish! 💖')">Make a Wish</button>
-        </div>
-      </div>
+  <!-- PASSCODE MODAL -->
+  <div id="pinModal">
+    <div class="pin-box">
+      <p class="subtitle">FOR YOUR EYES ONLY</p>
+      <h2>Enter Your Secret Code</h2>
+      <input type="password" id="pinInput" placeholder="••••••••">
+      <button onclick="unlockSite()">UNLOCK ✨</button>
     </div>
   </div>
 
-  <script>
-    const CORRECT_PIN = "1234"; // Ganti PIN sesuai keinginan
+  <!-- MAIN CONTENT -->
+  <div id="mainContent">
 
-    function checkPin() {
-      const input = document.getElementById('pinInput').value;
-      if (input === CORRECT_PIN) {
-        document.getElementById('pinScreen').style.display = 'none';
-        document.getElementById('mainContent').style.display = 'block';
+    <nav class="navbar">
+      <div class="brand">Rafi Noviyanto Pratama</div>
+      <div class="nav-links">
+        <a href="#surface">Surface</a>
+        <a href="#memories">Our Memories</a>
+        <a href="#gallery">Gallery</a>
+        <a href="#letter">The Letter</a>
+        <a href="#wishes">Wishes</a>
+      </div>
+    </nav>
+
+    <div id="surface" class="hero-card">
+      <p class="hero-subtitle">A MESSAGE CARRIED ON THE TIDE, FOR YOU</p>
+      <h1 class="hero-title">Happy Birthday,<br><i>My Favorite Person</i></h1>
+      <p class="hero-description">Somewhere past the breakers, sits a letter that has long been waiting for this day. Scroll down, the tide is coming in...</p>
+
+      <div class="countdown">
+        <div class="time-unit"><span id="days">00</span><label>HARI</label></div>
+        <div class="time-unit"><span id="hours">00</span><label>JAM</label></div>
+        <div class="time-unit"><span id="minutes">00</span><label>MENIT</label></div>
+        <div class="time-unit"><span id="seconds">00</span><label>DETIK</label></div>
+      </div>
+
+      <a href="#letter" class="btn-pink">Jump Straight to the Letter</a>
+    </div>
+
+    <div id="memories">
+      <div class="section-header">
+        <p class="tag">THE DEEPER SHOALS, ARE FEW TODAY</p>
+        <h2>Chapters from <i>our story</i></h2>
+      </div>
+
+      <div class="story-card">
+        <p class="chapter">CHAPTER 001</p>
+        <h3>where it all started</h3>
+        <p>“It all started with simple moments, little conversations, and somehow, you became someone who means so much to me.”<br><br>
+        Semua berawal dari momen-momen sederhana, obrolan kecil, dan entah bagaimana, kamu menjadi seseorang yang begitu berarti.</p>
+      </div>
+
+      <div class="story-card">
+        <p class="chapter">CHAPTER 002</p>
+        <h3>the quiet days</h3>
+        <p>“I’ve seen your quiet days, your little efforts, and all the things you keep working on.”<br><br>
+        Aku melihat hari-hari tenangmu, usaha-usaha kecilmu, dan semua hal yang terus kamu perjuangkan.</p>
+      </div>
+
+      <div class="story-card">
+        <p class="chapter">CHAPTER 003</p>
+        <h3>through the storms</h3>
+        <p>“I know it hasn’t always been easy, but I’m really proud of how you keep going and never give up on what matters to you.”<br><br>
+        Aku tahu semuanya nggak selalu mudah, tapi aku benar-benar bangga melihatmu terus berusaha dan nggak menyerah pada hal-hal yang berarti untukmu.</p>
+      </div>
+
+      <div class="story-card">
+        <p class="chapter">CHAPTER 004</p>
+        <h3>finding the light</h3>
+        <p>“Seeing how far you’ve come makes me so proud. Keep going, keep growing, and always remember that I’ll be cheering for you.”<br><br>
+        Melihat sejauh apa kamu sudah berkembang membuatku sangat bangga. Teruslah melangkah, terus berkembang, dan ingat bahwa aku akan selalu mendukungmu.</p>
+      </div>
+    </div>
+
+    <div id="gallery">
+      <div class="section-header">
+        <p class="tag">WASHED ASHORE, JUST FOR YOU</p>
+        <h2><i>A few of my favorite shots of you</i></h2>
+      </div>
+
+      <div class="photo-grid">
+        <div class="photo-item">
+          <img src="foto1.jpeg" alt="Foto 1">
+          <p>Always proud of the way you keep pushing yourself higher.</p>
+        </div>
+        <div class="photo-item">
+          <img src="foto2.jpeg" alt="Foto 2">
+          <p>Watching you chase your goals will always make me proud.</p>
+        </div>
+        <div class="photo-item">
+          <img src="foto3.jpeg" alt="Foto 3">
+          <p>You've come so far, and I'm so proud of how far you've made it.</p>
+        </div>
+        <div class="photo-item">
+          <img src="foto4.jpeg" alt="Foto 4">
+          <p>Still keep going at your own pace. I'll always be cheering for you.</p>
+        </div>
+      </div>
+    </div>
+
+    <div id="letter" style="margin-top: 40px;">
+      <div class="section-header">
+        <p class="tag">A BOTTLE, FINALLY ASHORE FOR YOU</p>
+        <h2>Open when <i>found</i></h2>
+      </div>
+
+      <div class="bottle-box">
+        <div class="bottle-icon" onclick="openLetter()">🍾</div>
+        <p style="font-size: 0.8rem; color: var(--blue-soft);">TAP THE BOTTLE TO OPEN IT</p>
+
+        <div id="letterContent" class="letter-content">
+          <p><strong>TO MAS,</strong></p><br>
+          <p>Halooo,</p><br>
+          <p>I don't know if you'll get bored or not with my long words, I hope not! I hope you always like me giving this, I want to hug you on your birthday, I want to say.</p><br>
+          <p>Happy birthday to u massss! Selamat bertambah usia, di umur yang sekarang ini ade berdoa semoga mas selalu dalam lindungan Allah SWT, selalu sehat, selalu baik, jadi seseorang yang selalu tumbuh jadi lebih baik. Jadi pribadi yang lebih baik buat diri sendiri juga buat orang lain ya mass, ngga kerasa ya kita uda sejauh ini.</p><br>
+          <p>Hopefully it will always be like that, you will never leave my life.</p><br>
+          <p>My wish for you on your birthday: whatever you ask, may you receive; whatever you are looking for, may you find it; whatever you want, may it be fulfilled on your birthday. I hope you walk on this journey knowing that you are mine. I hope even if things sometimes don't go your way, you won't stop trying and you won't give up on yourself. In hard times, I hope you will remind yourself of these words: "You deserve better, you deserve to be loved and celebrated in every way!" I really hope and pray for you: may you always be blessed with good health and abundance, and surrounded by good and helpful people.</p><br>
+          <p>Aku akan jadi seseorang yang selalu bangga sama kamu, sama perjalanan kamu, dan sama semua yang kamu lakukan. Aku bakal selalu support keinginan kamu, hobi kamu, dan hal-hal lain yang lagi kamu tekuni. Aku akan selalu di sini nemenin kamu, percayalah itu. Kalau kamu butuh orang buat hal apa pun, kabari aku ya? Aku akan selalu ada buat kamu di mana pun dan kapan pun, I will always endeavour for that.</p><br>
+          <p>If you feel your world feels heavy, I'm here to bring a little joy and tranquillity for you, dear. I will continue to be here to accompany you, be a place to share your stories and complaints, and be a home that isn't in the form of a house.</p><br>
+          <p style="text-align: right; margin-top: 15px; font-style: italic;">— FROM ADEE</p>
+        </div>
+      </div>
+    </div>
+
+    <div id="wishes">
+      <div class="section-header">
+        <p class="tag">SENT WITH THE CURRENT, FOR YOU</p>
+        <h2>Wishes for <i>the year ahead</i></h2>
+      </div>
+
+      <div class="wishes-grid">
+        <div class="wish-card">
+          May this year give you all the calm of the ocean, dan sediakan kamu juga hati kamu yang selalu penuh dengan kindness.
+        </div>
+        <div class="wish-card">
+          Hope your days stay this bright, membawa tenang mental di atas water, and your nights bring peaceful rest.
+        </div>
+        <div class="wish-card">
+          May every wish kamu pelan-pelan come true, exactly when you need it the most, no cap.
+        </div>
+        <div class="wish-card">
+          Happy birthday laly — cheers buat another year penuh memories yang bakal selalu worth keeping.
+        </div>
+      </div>
+    </div>
+
+    <div class="candle-box">
+      <h2 style="font-family: 'Playfair Display', serif; font-size: 2rem;">Happy Birthday, <i>truly.</i></h2>
+      <p style="font-size: 0.8rem; color: var(--blue-light); margin-top: 10px;">Terima kasih karna sudah mau bertahan sejauh ini, dan udah berani bertanggung jawab sama perasaan yang mas ciptain buat perempuannya mas. Ade bangga sama mas.</p>
+      
+      <div id="candles" class="candles">🕯️ 🕯️ 🕯️ 🕯️</div>
+      <button class="btn-pink" onclick="blowCandles()">Make a wish / Tiup Lilin 💨</button>
+    </div>
+
+  </div>
+
+  <audio id="bgMusic" loop>
+    <source src="lagu.mp3" type="audio/mpeg">
+  </audio>
+
+  <button id="musicBtn" class="music-btn" onclick="toggleMusic()">🎵 Play Music</button>
+
+  <script>
+    // 1. PIN UNLOCK & AUTOPLAY MUSIC
+    function unlockSite() {
+      const pin = document.getElementById("pinInput").value;
+      if (pin === "20112007") {
+        document.getElementById("pinModal").style.display = "none";
+        document.getElementById("mainContent").style.display = "block";
         
-        // Putar musik saat unlocked
-        const music = document.getElementById('bgMusic');
-        if(music) music.play().catch(()=>{});
+        // Autoplay musik saat PIN benar
+        const bgMusic = document.getElementById("bgMusic");
+        if (bgMusic) {
+          bgMusic.play().then(() => {
+            document.getElementById("musicBtn").innerText = "⏸️ Pause Music";
+          }).catch(err => {
+            console.log("Autoplay diblokir browser, klik tombol musik manual.");
+          });
+        }
       } else {
-        document.getElementById('errorMsg').innerText = "Kode salah, coba lagi!";
+        alert("Kode PIN salah! Coba masukkan PIN yang benar.");
       }
     }
 
-    function showTab(e, id) {
-      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-      document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
-      document.getElementById(id).classList.add('active');
-      e.target.classList.add('active');
+    // 2. COUNTDOWN TIMER LOGIC
+    const targetDate = new Date("2026-11-20T00:00:00").getTime();
+    setInterval(function() {
+      const now = new Date().getTime();
+      const diff = targetDate - now;
+
+      if (diff > 0) {
+        document.getElementById("days").innerText = String(Math.floor(diff / (1000 * 60 * 60 * 24))).padStart(2, '0');
+        document.getElementById("hours").innerText = String(Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
+        document.getElementById("minutes").innerText = String(Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+        document.getElementById("seconds").innerText = String(Math.floor((diff % (1000 * 60)) / 1000)).padStart(2, '0');
+      } else {
+        document.getElementById("days").innerText = "00";
+        document.getElementById("hours").innerText = "00";
+        document.getElementById("minutes").innerText = "00";
+        document.getElementById("seconds").innerText = "00";
+      }
+    }, 1000);
+
+    // 3. OPEN BOTTLE LETTER
+    function openLetter() {
+      const letter = document.getElementById("letterContent");
+      letter.style.display = (letter.style.display === "block") ? "none" : "block";
     }
 
-    function openLetter() {
-      document.getElementById('bottleBox').style.display = 'none';
-      document.getElementById('letterText').style.display = 'block';
+    // 4. BLOW CANDLES
+    function blowCandles() {
+      document.getElementById("candles").innerText = "💨 💨 💨 💨";
+      alert("Selamat berjuang dan jangan lupa bersyukur atas keberhasilanmu, bahagia menantimu! 🎉");
+    }
+
+    // 5. TOGGLE MUSIC
+    function toggleMusic() {
+      const bgMusic = document.getElementById("bgMusic");
+      const musicBtn = document.getElementById("musicBtn");
+      if (bgMusic) {
+        if (bgMusic.paused) {
+          bgMusic.play();
+          if (musicBtn) musicBtn.innerText = "⏸️ Pause Music";
+        } else {
+          bgMusic.pause();
+          if (musicBtn) musicBtn.innerText = "🎵 Play Music";
+        }
+      }
     }
   </script>
 </body>
